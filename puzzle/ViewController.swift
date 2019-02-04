@@ -67,19 +67,19 @@ class ViewController: UIViewController {
     }
     
     func randomLocation(){
+        let tempArr : NSMutableArray = axisArr.mutableCopy() as! NSMutableArray
         for eachBlock in blockArr{
-            let randIndex : Int = Int.random(in: 0 ..< axisArr.count)
-            let randCenter : CGPoint = axisArr[randIndex] as! CGPoint
+            let randIndex : Int = Int.random(in: 0 ..< tempArr.count)
+            let randCenter : CGPoint = tempArr[randIndex] as! CGPoint
 //        place block in random location and remove index number from array so it wont get used again
             (eachBlock as! UILabel).center = randCenter
-            axisArr.removeObject(at: randIndex)
+            tempArr.removeObject(at: randIndex)
             
         }
     }
     
-
-    @IBAction func resetGame(_ sender: Any){
-
+    @IBAction func newGame(_ sender: UIButton) {
+        randomLocation()
     }
     
 }
