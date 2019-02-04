@@ -18,6 +18,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         buildBlocks()
+        randomLocation()
     }
     func buildBlocks(){
         blockArr = []
@@ -63,6 +64,17 @@ class ViewController: UIViewController {
         let lastBlock : UILabel = blockArr[15] as! UILabel
         lastBlock.removeFromSuperview()
         blockArr.removeObject(at: 15)
+    }
+    
+    func randomLocation(){
+        for eachBlock in blockArr{
+            let randIndex : Int = Int.random(in: 0 ..< axisArr.count)
+            let randCenter : CGPoint = axisArr[randIndex] as! CGPoint
+//        place block in random location and remove index number from array so it wont get used again
+            (eachBlock as! UILabel).center = randCenter
+            axisArr.removeObject(at: randIndex)
+            
+        }
     }
     
 
