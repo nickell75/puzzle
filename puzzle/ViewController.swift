@@ -17,8 +17,10 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         buildBlocks()
         randomLocation()
+        
     }
     func buildBlocks(){
         blockArr = []
