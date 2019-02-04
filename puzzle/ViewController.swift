@@ -13,10 +13,12 @@ class ViewController: UIViewController {
     var blockArr : NSMutableArray = []
     var axisArr : NSMutableArray = []
     
+    var empty : CGPoint!
     @IBOutlet weak var gameView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         buildBlocks()
         randomLocation()
     }
@@ -38,6 +40,7 @@ class ViewController: UIViewController {
 //            create block
                 let blockFrame : CGRect = CGRect(x: 0, y: 0, width: blockWidth-6, height: blockWidth-6)
                 let block: UILabel = UILabel(frame: blockFrame)
+                block.isUserInteractionEnabled = true
 //            find center point for block for alignment
                 block.center = CGPoint(x: xAxis, y: yAxis)
 //            add number label for each block
@@ -76,11 +79,30 @@ class ViewController: UIViewController {
             tempArr.removeObject(at: randIndex)
             
         }
+        empty = tempArr[0] as! CGPoint
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let userTouch : UITouch = touches.first!
+        if (blockArr.contains(userTouch.view as Any)){
+            let touchView: UILabel = (userTouch.view) as! UILabel
+            let xDif: CGFloat = touchView.center.x - empty.x
+            let yDif: CGFloat = touchView.center.y - empty.y
+            let distance : CGFloat = sqrt(pow(xDif, 2) + pow(yDif, 2))
+            
+            if (distance == blockWidth){
+                let tempCenter : CGPoint = touchView.center
+                
+                touchView.center = empty
+                empty = tempCenter
+            }
+        }
     }
     
     @IBAction func newGame(_ sender: UIButton) {
         randomLocation()
     }
+    
     
 }
 
