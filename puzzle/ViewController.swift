@@ -13,7 +13,8 @@ class ViewController: UIViewController {
     var blockArr : NSMutableArray = []
     var axisArr : NSMutableArray = []
     
-    var empty : CGPoint!
+    var lastBlock : CGPoint!
+    
     @IBOutlet weak var gameView: UIView!
     
     override func viewDidLoad() {
@@ -43,6 +44,7 @@ class ViewController: UIViewController {
                 block.isUserInteractionEnabled = true
 //            find center point for block for alignment
                 block.center = CGPoint(x: xAxis, y: yAxis)
+                
 //            add number label for each block
                 block.text = String(numLabel)
 //            block styling
@@ -79,30 +81,53 @@ class ViewController: UIViewController {
             tempArr.removeObject(at: randIndex)
             
         }
-        empty = tempArr[0] as! CGPoint
+//        locate empty position on board, last element available in arr(16 in axis arr - 15 in block arr)
+        lastBlock = tempArr[0] as! CGPoint
     }
+    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let userTouch : UITouch = touches.first!
         if (blockArr.contains(userTouch.view as Any)){
-            let touchView: UILabel = (userTouch.view) as! UILabel
-            let xDif: CGFloat = touchView.center.x - empty.x
-            let yDif: CGFloat = touchView.center.y - empty.y
+            let touchView : UILabel = (userTouch.view) as! UILabel
+            let xDif : CGFloat = (touchView.center.x - lastBlock.x)
+            let yDif : CGFloat = (touchView.center.y - lastBlock.y)
             let distance : CGFloat = sqrt(pow(xDif, 2) + pow(yDif, 2))
             
             if (distance == blockWidth){
                 let tempCenter : CGPoint = touchView.center
+
+                UIView.beginAnimations(nil, context: nil)
+                UIView.setAnimationDuration(0.2)
                 
-                touchView.center = empty
-                empty = tempCenter
+                touchView.center = lastBlock
+                UIView.commitAnimations()
+   
+                lastBlock = tempCenter
+
+            } else if(distance == blockWidth * 3){
+                print(axisArr)
+//                var arr = Array(count: 3, repeatedValue: Array(count: 3, repeatedValue: 0))
+
+//                use to move multiple blocks at once
+//                UIView.animate(animations: { () -> Void in
+//                  let tempCenter : CGPoint = touchView.center     initial touch becomes becomes temp 3
+//                  let tempCenter1 : CGPoint(x: , y: )             adjacent to last block becomes last block
+//                  let tempCenter2 : CGPoint(x: , y: )             2 adjacent to last block becomes temp 1
+//                  let tempCenter3 : CGPoint(x: , y: )             3 adjacent to last block becomes temp 2
+//
+//                  touchView.center = tempCenter3
+//                  tempCenter3 = tempCenter2
+//                  lastBlock = tempCenter
+
             }
         }
+        
     }
     
     @IBAction func newGame(_ sender: UIButton) {
         randomLocation()
     }
-    
     
 }
 
